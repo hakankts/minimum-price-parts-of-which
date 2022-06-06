@@ -1,0 +1,98 @@
+BEGIN
+/*
+
+                -- Çalışma Şekli
+
+                SELECT
+
+                CALISMA_SAATI_HESAPLA (
+
+                  '2015-03-09 09:00:00',
+
+                  '2015-03-09 10:00:00',
+
+                  '09:00:00',
+
+                  '13:00:00',
+
+                  '09:00:00',
+
+                  '18:00:00'
+
+                );
+
+ 
+
+                -- ÇALIŞMAYA BAŞLAMA ZAMANI
+
+                -- ÇALIŞMA BİTİŞ ZAMANI
+
+                -- HAFTA SONU BAŞLAMA SAATİ
+
+                -- HAFTA SONU BİTİŞ SAATİ
+
+                -- HAFTA İÇİ BAŞLAMA SAATİ
+
+                -- HAFTA İÇİ BİTİŞ SAATİ
+
+ 
+
+                -- Zaman Hesap
+
+                SET @BAS_HI_TARIH = "2015-01-21 09:00:00";
+
+                SET @BIT_HI_TARIH = "2015-01-24 18:00:00";
+
+                SET @BAS_HS_CALISMA_SAAT = "09:00:00";
+
+                SET @BIT_HS_CALISMA_SAAT = "10:00:00";
+
+                SET @BAS_HI_CALISMA_SAAT = "09:00:00";
+
+                SET @BIT_HI_CALISMA_SAAT = "18:00:00";
+
+                              
+
+                SET @BAS_HI_TARIH = BAS_HI_TARIH;
+
+                SET @BIT_HI_TARIH = BIT_HI_TARIH;
+
+                SET @BAS_HS_CALISMA_SAAT = BAS_HS_CALISMA_SAAT;
+
+                SET @BIT_HS_CALISMA_SAAT = BIT_HS_CALISMA_SAAT;
+
+                SET @BAS_HI_CALISMA_SAAT = BAS_HI_CALISMA_SAAT;
+
+                SET @BIT_HI_CALISMA_SAAT = BIT_HI_CALISMA_SAAT;
+
+                */
+		
+		SET @TOPLAM = 0;
+	
+	SET @ILK_GUN_NO = DAYOFWEEK( BAS_HI_TARIH );
+	
+	SET @SON_GUN_NO = DAYOFWEEK( BIT_HI_TARIH );
+	
+	SET @GUNLUK_CALISMA_SAATI = TIMEDIFF( BIT_HI_CALISMA_SAAT, BAS_HI_CALISMA_SAAT );
+	
+	SET @GUNLUK_HS_CALISMA_SAATI = TIMEDIFF( BIT_HS_CALISMA_SAAT, BAS_HS_CALISMA_SAAT );
+	
+	SET @FARK_GUN = DATEDIFF( @BIT_HI_TARIH, @BAS_HI_TARIH ) -
+	IF
+		( DATE( @BAS_HI_TARIH )= DATE( @BIT_HI_TARIH ), 0, 1 ) +
+	IF
+		( @ILK_GUN_NO = @SON_GUN_NO AND DATE( @BAS_HI_TARIH )!= DATE( @BIT_HI_TARIH ), 1, 0 );
+
+	IF
+		(
+			DATE( BAS_HI_TARIH ) = DATE( BIT_HI_TARIH )) THEN
+			
+			SET @ILK_GUN_SAAT2 = TIMEDIFF(
+				TIME( BIT_HI_TARIH ),
+			TIME( BAS_HI_TARIH ));
+		ELSE 
+			SET @ILK_GUN_SAAT2 = TIMEDIFF(
+				TIME( BIT_HI_CALISMA_SAAT ),
+			TIME( BAS_HI_TARIH ));
+	
+END IF;
